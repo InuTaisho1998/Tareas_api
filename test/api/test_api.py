@@ -82,7 +82,7 @@ def test_eliminar_tarea(cliente):
               }, headers={
                 "Authorization": f"Bearer {access_token}"
               }) 
-    response = cliente.delete(f"/tareas/eliminar_tarea/API/V1/{tarea.json()["id"]}", headers={"Authorization": f"Bearer {access_token}" })
+    response = cliente.delete(f"/tareas/eliminar_tarea/API/V1/{tarea.json()['id']}", headers={"Authorization": f"Bearer {access_token}" })
 
     assert response.status_code == 204
 
@@ -103,7 +103,7 @@ def test_obtener_tarea_por_id(cliente):
             "Authorization": f"Bearer {access_token}"
           }) 
 
-    payload = cliente.get(f"/tareas/consultar_tarea_usuario_por_ID/API/V1/{tarea.json()["id"]}", headers={"Authorization": f"Bearer {access_token}"})
+    payload = cliente.get(f"/tareas/consultar_tarea_usuario_por_ID/API/V1/{tarea.json()['id']}", headers={"Authorization": f"Bearer {access_token}"})
 
     assert payload is not None
     assert payload.status_code == 200
@@ -196,7 +196,7 @@ def test_usuarioA_no_eliminar_tarea_usuarioB(cliente):
             "Authorization": f"Bearer {tokenUsuarioB}"
         })
 
-        response = cliente.delete(f"/tareas/eliminar_tarea/API/V1/{tareaUsuarioB.json()["id"]}", headers={"Authorization": f"Bearer {tokenusuarioA}" })
+        response = cliente.delete(f"/tareas/eliminar_tarea/API/V1/{tareaUsuarioB.json()['id']}", headers={"Authorization": f"Bearer {tokenusuarioA}" })
 
         assert response.status_code == 404
 
@@ -239,7 +239,7 @@ def test_UsuarioA_no_puede_ver_tarea_UsuarioB(cliente):
                     "Authorization": f"Bearer {tokenUsuarioB}"
                 })
 
-        UsuarioA_payload = cliente.get(f"/tareas/consultar_tarea_usuario_por_ID/API/V1/{tareaUsuarioB.json()["id"]}", headers={"Authorization": f"Bearer {tokenusuarioA}"})
+        UsuarioA_payload = cliente.get(f"/tareas/consultar_tarea_usuario_por_ID/API/V1/{tareaUsuarioB.json()['id']}", headers={"Authorization": f"Bearer {tokenusuarioA}"})
 
         assert UsuarioA_payload.status_code == 404 
 
@@ -266,7 +266,7 @@ def test_usuarioA_no_modificar_tarea_usuarioB(cliente):
             "Authorization": f"Bearer {tokenUsuarioB}"
         })
 
-        response = cliente.put(f"/tareas/actualizar_tarea/API/V1/{tareaUsuarioB.json()["id"]}", json={"nombre": "fakenewnombre",
+        response = cliente.put(f"/tareas/actualizar_tarea/API/V1/{tareaUsuarioB.json()['id']}", json={"nombre": "fakenewnombre",
                                                                 "fecha": "2027-09-29",
                                                                 "descripcion": "fakenewdescripcion"}, 
                                                                 headers={"Authorization": f"Bearer {tokenusuarioA}"})
