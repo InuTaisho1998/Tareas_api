@@ -34,5 +34,5 @@ jobs:
     - name: correr test unitarios y de api
       run: python -m pytest
 
-    -name: correr prueba de docker compose
-     run: docker compose config --quiet
+    - name: correr prueba de docker compose
+      run: docker compose config --quiet
