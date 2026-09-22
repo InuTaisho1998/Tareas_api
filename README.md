@@ -10,9 +10,12 @@ The main objective of this project is to practice the fundamentals of backend de
 
 ## 🚀 Features
 
+* Login user
+* Register user
 * Create tasks
 * Get tasks
 * Get a task by ID
+* Get a all tasks
 * Update tasks
 * Delete tasks
 * Request validation
@@ -26,10 +29,10 @@ The main objective of this project is to practice the fundamentals of backend de
 
 The project is currently built with:
 
-* **[YOUR LANGUAGE]**
-* **[YOUR FRAMEWORK]**
-* **[YOUR DATABASE]**
-* **[OTHER MAIN TECHNOLOGY, IF APPLICABLE]**
+* **python**
+* **FastAPI**
+* **postgresql**
+* **authentication**
 
 ### Main concepts practiced
 
@@ -47,19 +50,31 @@ The project is currently built with:
 ## 📁 Project Structure
 
 ```text
-Tareas_apihazme/
+Tareas_api/
 │
-├── [folder]/
-│   ├── [file]
-│   └── [file]
+├── [app]/
+│   ├── [router]
+│   │   ├── [auth.py]
+│   │   └── [task.py]
+│   ├── [database.py]
+│   ├── [main.py]
+│   ├── [models.py]
+│   ├── [security.py]
+│   └── [schemas.py]
 │
-├── [folder]/
-│   ├── [file]
-│   └── [file]
+├── [tests]/
+│   ├── [api]/
+│   │   └── [test_api.py]
+│   ├── [unit]/
+│   │   └── [test_unit.py]
+│   └── conftest.py
 │
-├── [configuration file]
+├── docker-compose.yml
 ├── README.md
-└── [other important files]
+├── .dockerignore
+├── .gitignore
+├── requirements.txt
+└── [Dockerfile]
 ```
 
 The project is intentionally kept relatively simple. The goal is to demonstrate a clear understanding of backend fundamentals rather than introduce unnecessary complexity.
@@ -71,24 +86,25 @@ The project is intentionally kept relatively simple. The goal is to demonstrate 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/InuTaisho1998/Tareas_apihazme.git
+git clone https://github.com/InuTaisho1998/Tareas_api
 ```
 
 ### 2. Enter the project directory
 
 ```bash
-cd Tareas_apihazme
+cd Tareas_api
 ```
 
 ### 3. Install dependencies
 
 ```bash
-[INSTALL COMMAND]
+pip install -r requirements.txt
 ```
 
 ### 4. Configure environment variables
 
 Create a `.env` file when required by the project.
+But it have already some variables set
 
 Example:
 
@@ -102,13 +118,13 @@ Example:
 ### 5. Run the application
 
 ```bash
-[RUN COMMAND]
+docker compose up --build
 ```
 
 The API should then be available at:
 
 ```text
-http://localhost:[PORT]
+http://localhost:8000
 ```
 
 ---
@@ -117,13 +133,13 @@ http://localhost:[PORT]
 
 ### Tasks
 
-| Method          | Endpoint      | Description       |
-| --------------- | ------------- | ----------------- |
-| `GET`           | `/tasks`      | Get all tasks     |
-| `GET`           | `/tasks/{id}` | Get a task by ID  |
-| `POST`          | `/tasks`      | Create a new task |
-| `PUT` / `PATCH` | `/tasks/{id}` | Update a task     |
-| `DELETE`        | `/tasks/{id}` | Delete a task     |
+| Method          | Endpoint                                                | Description       |
+| --------------- | -------------                                           | ----------------- |
+| `GET`           | `/consultar_tareas_usuario/API/V1`                      | Get all tasks     |
+| `GET`           | `/consultar_tarea_usuario_por_ID/API/V1/{tarea_id}`     | Get a task by ID  |
+| `POST`          | `/tareas/crear_tarea/API/V1`                            | Create a new task |
+| `PUT` / `PATCH` | `/actualizar_tarea/API/V1/{tarea_id}`                   | Update a task     |
+| `DELETE`        | `/eliminar_tarea/API/V1/{tarea_id}`                     | Delete a task     |
 
 > Update this table to match the routes implemented in the project.
 
@@ -171,7 +187,7 @@ When running the project locally, API endpoints can be tested using tools such a
 Example:
 
 ```text
-http://localhost:[PORT]/[DOCS_ROUTE]
+http://localhost:8000/docs
 ```
 
 ---
@@ -199,13 +215,8 @@ During its development, I practiced:
 This project is intentionally simple, but there are several areas that could be improved as I continue developing my backend skills:
 
 * Add automated tests
-* Improve API validation
 * Add better centralized error handling
-* Add authentication and authorization
 * Improve logging
-* Add API documentation with OpenAPI/Swagger
-* Containerize the application with Docker
-* Add CI with GitHub Actions
 * Improve database migrations
 * Add pagination and filtering for larger datasets
 
