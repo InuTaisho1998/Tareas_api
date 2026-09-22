@@ -1,0 +1,37 @@
+services:
+  tests:
+    build: .
+    container_name: tareas_tests
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    command: ruff check . && pytest
+  api:
+    build: .
+    container_name: tareas_api
+    ports: 
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - SECRET_KEY=sjdfbksdjfbksadjbfasdfbaskdfbaskddsfhasidhfaoshfiouaewfhawhoefhawpefhiuasebaiowefbaiwoeubfiawubefu
+      - URL_DB=postgresql://postgres:fnisfbnaiweb@db:5432/tareas
+    depends_on:
+      db:
+        condition: service_started
+      tests:
+        condition: service_completed_successfully
+  db:
+    image: postgres:15
+    container_name: base_de_datos
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=fnisfbnaiweb
+      - POSTGRES_DB=tareas
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+volumes:
+  postgres_data:            

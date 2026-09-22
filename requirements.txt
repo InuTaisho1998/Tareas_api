@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+pwdlib
+bcrypt
+pyjwt
+python-multipart
+psycopg2-binary
+argon2-cffi
+pytest
+httpx2
+email-validator
+ruff
