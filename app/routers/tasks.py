@@ -1,14 +1,12 @@
-import os
-
 import jwt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
+from app.config import Settings
 from app.database import get_db
 from app.models import TasksTable, UserTable
 from app.schemas import TaskCreate, TaskResponse, TasksResponse
-from app.config import Settings
 
 router = APIRouter(prefix="/api/v1", tags=["tasks"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/register")
