@@ -6,12 +6,12 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import UserTable, UsuariosTable
-from app.shemas import TareaResponse, Tareas, TareasResponse
+from app.models import TasksTable, UserTable
+from app.schemas import TaskCreate, TaskResponse, TasksResponse
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-router = APIRouter(prefix="/tareas", tags=["Tareas"])
+router = APIRouter(prefix="/tasks", tags=["Tasks"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login/API/V1")
 
 # Helper function to get current user
@@ -20,58 +20,61 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         username = payload.get("sub")
     except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="No autorizado")    
+        raise HTTPException(status_code=401, detail="Unauthorized")    
     
-    user = db.query(UsuariosTable).filter(UsuariosTable.username == username).first()
+    user = db.query(UserTable).filter(UserTable.username == username).first()
     if user is None:
-        raise HTTPException(status_code=401, detail="No autorizado")
+        raise HTTPException(status_code=401, detail="Unauthorized")
     return user
 
-@router.post("/crear_tarea/API/V1", status_code=201, response_model=TareaResponse) 
-def crear_tarea(data: Tareas, db: Session = Depends(get_db), usuario = Depends(get_current_user)): #noqa: B008
-    newtarea = UserTable(
-        nombre=data.nombre,
-        fecha=data.fecha,
-        descripcion=data.descripcion,
-        owner_id=usuario.id 
+@router.post("/create_task/API/V1", status_code=201, response_model=TaskResponse) 
+def create_task(data: TaskCreate, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
+    newtask = TasksTable(
+        name=data.name,
+        deadline=data.deadline,
+        description=data.description,
+        owner_id=user.id 
     )
 
-    db.add(newtarea)
+    db.add(newtask)
     db.commit()
-    db.refresh(newtarea)
-    return {"id": newtarea.id, "nombre": newtarea.nombre, "fecha": newtarea.fecha, "descripcion": newtarea.descripcion}
+    db.refresh(newtask)
 
-@router.get("/consultar_tarea_usuario_por_ID/API/V1/{tarea_id}", status_code=200, response_model=TareaResponse)
-def consultar_tarea_por_ID(tarea_id: int, db: Session = Depends(get_db), usuario = Depends(get_current_user)): #noqa: B008
-    tarea = db.query(UserTable).filter(UserTable.id == tarea_id, UserTable.owner_id == usuario.id).first()
-    if not tarea:
-        raise HTTPException(status_code=404, detail="Tarea no encontrada")
-    return {"id": tarea.id, "nombre": tarea.nombre, "fecha": tarea.fecha, "descripcion": tarea.descripcion}
+    return {"id": newtask.id, "name": newtask.name, "deadline": newtask.deadline, "description": newtask.description}
 
-@router.get("/consultar_tareas_usuario/API/V1", status_code=200, response_model=TareasResponse)
-def tareas(db: Session = Depends(get_db), usuario = Depends(get_current_user)): #noqa: B008
-    user_tareas = db.query(UserTable).filter(UserTable.owner_id == usuario.id).all()
-    return {"tareas": user_tareas}
+@router.get("/consult_user_task_by_ID/API/V1/{tasks_id}", status_code=200, response_model=TaskResponse)
+def consult_user_task_by_ID(tasks_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
+    task = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return {"id": task.id, "name": task.name, "deadline": task.deadline, "description": task.description}
 
-@router.put("/actualizar_tarea/API/V1/{tarea_id}", status_code=200, response_model=TareaResponse)
-def actualizar_tarea(tarea_id: int, data: Tareas, db: Session = Depends(get_db), usuario = Depends(get_current_user)): #noqa: B008
-    tarea_a_actualizar = db.query(UserTable).filter(UserTable.id == tarea_id, UserTable.owner_id == usuario.id).first()
-    if not tarea_a_actualizar:
-        raise HTTPException(status_code=404, detail="Tarea no encontrada")
+@router.get("/consult_tasks_user/API/V1", status_code=200, response_model=TasksResponse)
+def get_task(db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
+    user_Tasks = db.query(TasksTable).filter(TasksTable.owner_id == user.id).all()
+
+    return {"tasks": user_Tasks}
+
+@router.put("/update_task/API/V1/{tasks_id}", status_code=200, response_model=TaskResponse)
+def update_task(tasks_id: int, data: TaskCreate, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
+    task_to_update = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
+    if not task_to_update:
+        raise HTTPException(status_code=404, detail="Task not found")
         
-    tarea_a_actualizar.nombre = data.nombre
-    tarea_a_actualizar.fecha = data.fecha
-    tarea_a_actualizar.descripcion = data.descripcion
+    task_to_update.name = data.name
+    task_to_update.deadline = data.deadline
+    task_to_update.description = data.description
 
     db.commit()
-    db.refresh(tarea_a_actualizar)
-    return {"id": tarea_a_actualizar.id, "nombre": tarea_a_actualizar.nombre, "fecha": tarea_a_actualizar.fecha, "descripcion": tarea_a_actualizar.descripcion}
+    db.refresh(task_to_update)
 
-@router.delete("/eliminar_tarea/API/V1/{tarea_id}", status_code=204)
-def eliminar_tarea(tarea_id: int, db: Session = Depends(get_db), usuario = Depends(get_current_user)): #noqa: B008
-    delete = db.query(UserTable).filter(UserTable.id == tarea_id, UserTable.owner_id == usuario.id).first()
+    return {"id": task_to_update.id, "name": task_to_update.name, "deadline": task_to_update.deadline, "description": task_to_update.description}
+
+@router.delete("/delete_task/API/V1/{tasks_id}", status_code=204)
+def eliminar_task(tasks_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
+    delete = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
     if not delete:
-        raise HTTPException(status_code=404, detail="Tarea no encontrada")
+        raise HTTPException(status_code=404, detail="Task not found")
         
     db.delete(delete)
     db.commit()

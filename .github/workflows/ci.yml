@@ -1,4 +1,4 @@
-name: CI proyecto tareas
+name: CI project tasks
 
 on:
   push:
@@ -12,27 +12,31 @@ jobs:
   
     steps:
   
-    - name: copiar repositorio de codigo
+    - name: copy code repository
       uses: actions/checkout@v4
   
-    - name: configurar python
+    - name: configure python
       uses: actions/setup-python@v5
       with:
         python-version: '3.11'
   
-    - name: instalar libretas o dependencias
+    - name: install libraries or dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
   
-    - name: correr test de sintaxis
+    - name: run syntax test
       run: python -m compileall .
 
-    - name: correr test con ruff
+    - name: run test with ruff
       run: ruff check .
   
-    - name: correr test unitarios y de api
+    - name: run unit and API test
       run: python -m pytest
 
-    - name: correr prueba de docker compose
-      run: docker compose config --quiet
+    - name: run a Docker Compose test
+      env:
+        SECRET_KEY: ${{secrets.SECRET_KEY}}
+        POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+        POSTGRES_USER: ${{secrets.POSTGRES_USER}}
+      run: docker compose up --build

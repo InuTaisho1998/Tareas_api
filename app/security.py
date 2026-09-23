@@ -1,16 +1,14 @@
-import os
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from dotenv import load_dotenv
+from config import settings
 from pwdlib import PasswordHash
 
-load_dotenv()
 
 password_hash_context = PasswordHash.recommended()
 
-SECRET_KEY=os.getenv("SECRET_KEY")
-ALGORITHM ="HS256"
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = "HS256"
 ACCES_TOKENS_EXPIRE_MINUTES = 15
 
 
