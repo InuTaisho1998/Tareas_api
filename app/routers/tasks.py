@@ -11,7 +11,7 @@ from app.schemas import TaskCreate, TaskResponse, TasksResponse
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-router = APIRouter(prefix="/tasks", tags=["Tasks"])
+router = APIRouter(prefix="/api/v1", tags=["tasks"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login/API/V1")
 
 # Helper function to get current user
@@ -27,7 +27,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         raise HTTPException(status_code=401, detail="Unauthorized")
     return user
 
-@router.post("/create_task/API/V1", status_code=201, response_model=TaskResponse) 
+@router.post("/tasks", status_code=201, response_model=TaskResponse) 
 def create_task(data: TaskCreate, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
     newtask = TasksTable(
         name=data.name,
@@ -42,20 +42,20 @@ def create_task(data: TaskCreate, db: Session = Depends(get_db), user = Depends(
 
     return {"id": newtask.id, "name": newtask.name, "deadline": newtask.deadline, "description": newtask.description}
 
-@router.get("/consult_user_task_by_ID/API/V1/{tasks_id}", status_code=200, response_model=TaskResponse)
+@router.get("/tasks/{tasks_id}", status_code=200, response_model=TaskResponse)
 def consult_user_task_by_ID(tasks_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
     task = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return {"id": task.id, "name": task.name, "deadline": task.deadline, "description": task.description}
 
-@router.get("/consult_tasks_user/API/V1", status_code=200, response_model=TasksResponse)
+@router.get("/tasks", status_code=200, response_model=TasksResponse)
 def get_task(db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
     user_Tasks = db.query(TasksTable).filter(TasksTable.owner_id == user.id).all()
 
     return {"tasks": user_Tasks}
 
-@router.put("/update_task/API/V1/{tasks_id}", status_code=200, response_model=TaskResponse)
+@router.put("/tasks/{tasks_id}", status_code=200, response_model=TaskResponse)
 def update_task(tasks_id: int, data: TaskCreate, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
     task_to_update = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
     if not task_to_update:
@@ -70,7 +70,7 @@ def update_task(tasks_id: int, data: TaskCreate, db: Session = Depends(get_db), 
 
     return {"id": task_to_update.id, "name": task_to_update.name, "deadline": task_to_update.deadline, "description": task_to_update.description}
 
-@router.delete("/delete_task/API/V1/{tasks_id}", status_code=204)
+@router.delete("/tasks/{tasks_id}", status_code=204)
 def eliminar_task(tasks_id: int, db: Session = Depends(get_db), user = Depends(get_current_user)): #noqa: B008
     delete = db.query(TasksTable).filter(TasksTable.id == tasks_id, TasksTable.owner_id == user.id).first()
     if not delete:

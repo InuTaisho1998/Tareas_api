@@ -1,5 +1,11 @@
 # Tareas API
 
+[![CI Status](https://github.com/InuTaisho1998/Tareas_api/actions/workflows/ci.yml/badge.svg)](https://github.com/InuTaisho1998/Tareas_api/actions)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-005571?style=for-the-badge&logo=fastapi)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+
 REST API for managing tasks, developed as a backend practice project.
 
 The main objective of this project is to practice the fundamentals of backend development: building HTTP endpoints, handling requests and responses, working with persistent data, validating input, and organizing a small API in a maintainable way.
@@ -58,6 +64,7 @@ Tareas_api/
 │   │   └── [task.py]
 │   ├── [database.py]
 │   ├── [main.py]
+│   ├── [config.py]
 │   ├── [models.py]
 │   ├── [security.py]
 │   └── [schemas.py]
@@ -249,6 +256,8 @@ https://github.com/InuTaisho1998
 
 ---
 
+#---
+
 ## 📄 License
 
-This project currently does not specify a license.
+This project is licensed under the [MIT License](LICENSE).

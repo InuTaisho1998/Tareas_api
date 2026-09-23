@@ -7,9 +7,9 @@ from app.models import UserTable
 from app.schemas import TokenResponse, UsersCreate
 from app.security import create_access_token, generate_password_hash, verify_password
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/api/v1", tags=["auth"])
 
-@router.post("/sign_up/API/V1", status_code=201, response_model=TokenResponse)
+@router.post("/auth/register", status_code=201, response_model=TokenResponse)
 def registrar(data: UsersCreate, db: Session = Depends(get_db)): #noqa: B008
     username = db.query(UserTable).filter(UserTable.username == data.username).first()
     email = db.query(UserTable).filter(UserTable.email == data.email).first()
@@ -27,7 +27,7 @@ def registrar(data: UsersCreate, db: Session = Depends(get_db)): #noqa: B008
     return {"access_token": token, "token_type": "bearer"}
 
 
-@router.post("/login/API/V1", status_code=200, response_model=TokenResponse)
+@router.post("/auth/login", status_code=200, response_model=TokenResponse)
 def login(Form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)): #noqa: B008
     user = db.query(UserTable).filter(UserTable.username == Form.username).first()
     if not user or not verify_password(password_plana=Form.password, hash_guardado=user.password_hash):

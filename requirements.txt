@@ -13,3 +13,4 @@ httpx2
 email-validator
 ruff
 pydantic-settings
+alembic

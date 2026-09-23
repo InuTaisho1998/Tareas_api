@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-os.environ["URL_DB"] = "sqlite:///./test.db"
+os.environ["DATABASE_URL"] = "sqlite:///./test.db"
 os.environ["SECRET_KEY"] = "askfgjdgasdfgkgasdkhfhjfgsdakhgasdhfjhasdgfjsdafvgasdfhjhsafsjdsdavfokmasvbfkasdvfafiopj"
 
 from app.database import Base, get_db

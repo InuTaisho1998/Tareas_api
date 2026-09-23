@@ -3,7 +3,7 @@ from datetime import date
 from sqlalchemy import Date, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.database import Base, engine
+from app.database import Base
 
 
 ###Cracion de tablas base de datos
@@ -23,5 +23,3 @@ class UserTable(Base):
     email: Mapped[str]= mapped_column(String(50),unique=True,index=True)
     password_hash: Mapped[str]= mapped_column (String(200))
     tasks: Mapped[list["TasksTable"]]= relationship(back_populates="owner")
-
-Base.metadata.create_all(bind=engine)

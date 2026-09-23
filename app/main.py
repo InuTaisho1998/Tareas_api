@@ -1,9 +1,6 @@
-from dotenv import load_dotenv
 from fastapi import FastAPI
 
 from app.routers import auth, tasks
-
-load_dotenv()
 
 app = FastAPI()
 
