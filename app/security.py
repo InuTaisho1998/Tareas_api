@@ -4,7 +4,6 @@ import jwt
 from config import settings
 from pwdlib import PasswordHash
 
-
 password_hash_context = PasswordHash.recommended()
 
 SECRET_KEY = settings.SECRET_KEY

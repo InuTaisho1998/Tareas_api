@@ -2,7 +2,6 @@ from config import settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-
 URL_DB = settings.DATABASE_URL
 
 ######Conetion Data Base

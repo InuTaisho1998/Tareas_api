@@ -12,7 +12,7 @@ class TasksTable(Base):
     id: Mapped[int]= mapped_column(Integer, primary_key=True)
     name: Mapped[str]= mapped_column(String(30))
     deadline: Mapped[date]= mapped_column (Date())
-    description: Mapped[str]= mapped_column(String[30])
+    description: Mapped[str]= mapped_column(String(30))
     owner_id: Mapped[int]= mapped_column(ForeignKey("Users.id"))
     owner: Mapped["UserTable"]= relationship(back_populates="tasks")
 

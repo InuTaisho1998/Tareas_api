@@ -7,7 +7,7 @@ from app.models import UserTable
 from app.schemas import TokenResponse, UsersCreate
 from app.security import create_access_token, generate_password_hash, verify_password
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/sign_up/API/V1", status_code=201, response_model=TokenResponse)
 def registrar(data: UsersCreate, db: Session = Depends(get_db)): #noqa: B008
