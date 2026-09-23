@@ -116,8 +116,9 @@ But it have already some variables set
 Example:
 
 ```env
-[VARIABLE_NAME]=[VALUE]
-[VARIABLE_NAME]=[VALUE]
+SECRET_KEY=misupersecretkey
+POSTGRES_USER=postgresuser
+POSTGRES_PASSWORD=Fakepassword
 ```
 
 > Do not commit real credentials, passwords, API keys, or other sensitive information to the repository.
@@ -140,13 +141,13 @@ http://localhost:8000
 
 ### Tasks
 
-| Method          | Endpoint                                                | Description       |
-| --------------- | -------------                                           | ----------------- |
-| `GET`           | `/consultar_tareas_usuario/API/V1`                      | Get all tasks     |
-| `GET`           | `/consultar_tarea_usuario_por_ID/API/V1/{tarea_id}`     | Get a task by ID  |
-| `POST`          | `/tareas/crear_tarea/API/V1`                            | Create a new task |
-| `PUT` / `PATCH` | `/actualizar_tarea/API/V1/{tarea_id}`                   | Update a task     |
-| `DELETE`        | `/eliminar_tarea/API/V1/{tarea_id}`                     | Delete a task     |
+| Method          | Endpoint                   | Description       |
+| --------------- | -------------              | ----------------- |
+| `GET`           | `/api/v1/tasks`            | Get all tasks     |
+| `GET`           | `/api/v1/tasks{task_id}`   | Get a task by ID  |
+| `POST`          | `/api/v1/tasks`            | Create a newtask |
+| `PUT` / `PATCH` | `/api/v1/tasks{task_id}`   | Update atask     |
+| `DELETE`        | `/api/v1/tasks{task_id}`   | Delete atask     |
 
 > Update this table to match the routes implemented in the project.
 
