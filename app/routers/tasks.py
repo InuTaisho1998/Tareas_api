@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
-from app.config import Settings
+from app.config import settings
 from app.database import get_db
 from app.models import TasksTable, UserTable
 from app.schemas import TaskCreate, TaskResponse, TasksResponse
@@ -11,10 +11,12 @@ from app.schemas import TaskCreate, TaskResponse, TasksResponse
 router = APIRouter(prefix="/api/v1", tags=["tasks"])
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/register")
 
+SECRET_KEY = settings.SECRET_KEY
+
 # Helper function to get current user
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)): #noqa: B008
     try:
-        payload = jwt.decode(token, Settings.SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         username = payload.get("sub")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Unauthorized")    
