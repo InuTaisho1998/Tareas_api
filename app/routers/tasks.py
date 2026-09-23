@@ -12,7 +12,7 @@ from app.schemas import TaskCreate, TaskResponse, TasksResponse
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 router = APIRouter(prefix="/api/v1", tags=["tasks"])
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login/API/V1")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/register")
 
 # Helper function to get current user
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)): #noqa: B008
